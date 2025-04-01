@@ -16,11 +16,17 @@ type Block struct {
 	Phash []byte
 }
 
+func calcHash(raw string) []byte {
+
+	h := sha256.New()
+	h.Write([]byte(raw))
+	return h.Sum(nil)
+
+}
+
 func (b *Block) createH() {
 	s := strconv.Itoa(b.Index) + b.Data + b.Time + hex.EncodeToString(b.Phash)
-	h := sha256.New()
-	h.Write([]byte(s))
-	b.Hash = h.Sum(nil)
+	b.Hash = calcHash(s)
 }
 
 func newBlock(pre *Block, d string) Block {
