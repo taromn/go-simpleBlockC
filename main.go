@@ -23,11 +23,22 @@ func (b *Block) createH() {
 	b.Hash = h.Sum(nil)
 }
 
+func newBlock(pre *Block, d string) Block {
+
+	newb := Block{pre.Index + 1, d, time.Now().String(), []byte{}, pre.Hash}
+	newb.createH()
+	return newb
+}
+
 func main() {
 	genesis := Block{0, "First Block", time.Now().String(), []byte{}, []byte{}}
 
 	genesis.createH()
 
 	fmt.Println(genesis)
+
+	second := newBlock(&genesis, "Second Block")
+
+	fmt.Println(second)
 
 }
