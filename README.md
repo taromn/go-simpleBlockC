@@ -6,8 +6,12 @@ simple Blockchain model
 
 ```
 func newBlock(pre *Block, tdata []string) Block {
-
-	newb := Block{pre.Index + 1, tdata, "", time.Now().String(), "", pre.Hash}
+	var newb Block
+	if pre == nil {
+		newb = Block{0, tdata, "", time.Now().String(), "", ""} // genesis
+	} else {
+		newb = Block{pre.Index + 1, tdata, "", time.Now().String(), "", pre.Hash} // not genesis
+	}
 	newb.calcRoot()
 	newb.createH()
 	return newb
