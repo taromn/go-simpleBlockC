@@ -31,8 +31,12 @@ func (b *Block) createH() {
 }
 
 func newBlock(pre *Block, tdata []string) Block {
-
-	newb := Block{pre.Index + 1, tdata, "", time.Now().String(), "", pre.Hash}
+	var newb Block
+	if pre == nil {
+		newb = Block{0, tdata, "", time.Now().String(), "", ""} // genesis
+	} else {
+		newb = Block{pre.Index + 1, tdata, "", time.Now().String(), "", pre.Hash} // not genesis
+	}
 	newb.calcRoot()
 	newb.createH()
 	return newb
@@ -68,9 +72,8 @@ var tran1 = []string{"transaction1", "transaction2", "transaction3"}
 var tran2 = []string{"transaction4", "transaction5"}
 
 func main() {
-	genesis := Block{0, tran1, "", time.Now().String(), "", ""}
-	genesis.calcRoot()
-	genesis.createH()
+	// if genesis block, the previous block should be nil
+	genesis := newBlock(nil, tran1)
 	fmt.Println(genesis)
 
 	second := newBlock(&genesis, tran2)
